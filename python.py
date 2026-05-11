@@ -3,24 +3,24 @@ import os
 
 app = Flask(__name__)
 
-# Simulácia databázy v pamäti
+# Simulácia databázy v pamäti (pri reštarte servera sa vymaže)
 people = [
     {"id": 1, "name": "Anna", "age": 25, "image": "https://via.placeholder.com/100"},
     {"id": 2, "name": "Peter", "age": 30, "image": "https://via.placeholder.com/100"}
 ]
 next_id = 3
 
-# Cesta k hlavnej stránke (index.html)
+# Cesta k hlavnej stránke
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
 
-# Zabezpečenie načítania script.js a iných súborov
+# Statické súbory (script.js, CSS atď.)
 @app.route('/<path:path>')
 def send_static(path):
     return send_from_directory('.', path)
 
-# API: Načítanie a pridanie ľudí
+# API: Načítanie a pridanie
 @app.route('/api', methods=['GET', 'POST'])
 def handle_people():
     global next_id
@@ -34,7 +34,7 @@ def handle_people():
         people.append(new_person)
         return jsonify(new_person), 201
 
-# API: Vymazanie človeka
+# API: Vymazanie
 @app.route('/api/<int:person_id>', methods=['DELETE'])
 def delete_person(person_id):
     global people
@@ -42,8 +42,5 @@ def delete_person(person_id):
     return '', 204
 
 if __name__ == '__main__':
-    # Render potrebuje port z prostredia alebo 5000, a host 0.0.0.0
-    import os
     port = int(os.environ.get("PORT", 5000))
-    # OPRAVENÉ: Tu bola jedna zátvorka navyše na konci
     app.run(host='0.0.0.0', port=port)
