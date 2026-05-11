@@ -37,4 +37,7 @@ def delete_person(person_id):
     return '', 204
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Render potrebuje port z prostredia alebo 5000, a host 0.0.0.0
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port))
