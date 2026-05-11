@@ -15,6 +15,11 @@ next_id = 3
 def index():
     return send_from_directory('.', 'index.html')
 
+# Zabezpečenie načítania script.js a iných súborov
+@app.route('/<path:path>')
+def send_static(path):
+    return send_from_directory('.', path)
+
 # API: Načítanie a pridanie ľudí
 @app.route('/api', methods=['GET', 'POST'])
 def handle_people():
@@ -40,4 +45,5 @@ if __name__ == '__main__':
     # Render potrebuje port z prostredia alebo 5000, a host 0.0.0.0
     import os
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port))
+    # OPRAVENÉ: Tu bola jedna zátvorka navyše na konci
+    app.run(host='0.0.0.0', port=port)
